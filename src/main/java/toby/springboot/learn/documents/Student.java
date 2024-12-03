@@ -16,7 +16,6 @@ import java.util.List;
 
 @Document
 @NoArgsConstructor
-@AllArgsConstructor
 @Data
 public class Student
 {
@@ -30,4 +29,18 @@ public class Student
     private Instant createdAt;
     private List<Subject> favouriteSubjects = new ArrayList<>();
     private BigDecimal totalSpentInBooks;
+
+    public Student(String firstName, String lastName, String email,
+                   Gender gender, Address address, Instant createdAt,
+                   List<Subject> favouriteSubjects, BigDecimal totalSpentInBooks)
+    {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.gender = gender;
+        this.address = address;
+        this.createdAt = createdAt;
+        this.favouriteSubjects = favouriteSubjects;
+        this.totalSpentInBooks = totalSpentInBooks;
+    }
 }

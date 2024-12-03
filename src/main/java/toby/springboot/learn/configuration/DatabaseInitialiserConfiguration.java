@@ -42,24 +42,31 @@ public class DatabaseInitialiserConfiguration
                     List.of(Subject.MATH),
                     new BigDecimal("132.65")
             );
-            final var query = new Query()
-                    .addCriteria(Criteria.where("email")
-                            .is("tobyg7794@hotmail.com"));
-
-            final var students = mongoTemplate.find(query, Student.class);
-            if(students.size() > 1)
-            {
-                throw new IllegalStateException();
-            }
-            else if (students.size() == 1)
-            {
-                log.warn("Student with email [{}] already exists", email);
-            }
-            else
-            {
-                repository.insert(student);
-            }
+            //insertViaMongoTemplate(repository, mongoTemplate, email, student);
+            repository.findStudentByEmail(email)
+                    .ifPresentOrElse(s -> log.warn("Student with email [{}] already exists", email),
+                            () -> repository.insert(student));
         };
+    }
+
+    private static void insertViaMongoTemplate(StudentRepository repository, MongoTemplate mongoTemplate, String email, Student student) {
+        final var query = new Query()
+                .addCriteria(Criteria.where("email")
+                        .is("tobyg7794@hotmail.com"));
+
+        final var students = mongoTemplate.find(query, Student.class);
+        if(students.size() > 1)
+        {
+            throw new IllegalStateException();
+        }
+        else if (students.size() == 1)
+        {
+            log.warn("Student with email [{}] already exists", email);
+        }
+        else
+        {
+            repository.insert(student);
+        }
     }
 
 }

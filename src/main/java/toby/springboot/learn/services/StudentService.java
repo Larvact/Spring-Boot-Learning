@@ -26,6 +26,7 @@ public class StudentService
 
     public void deleteStudent(final String id)
     {
+        validateRequestId(id);
         studentRepository.deleteById(id);
     }
 
@@ -36,13 +37,18 @@ public class StudentService
         return studentRepository.save(student);
     }
 
-    private static void validateUpdateStudentRequest(final String id, final Student student)
+    private static void validateRequestId(final String id)
     {
         if(id == null || id.isBlank())
         {
             throw new MalformedApiRequestException("The provided Id was missing. Unable to update the student.");
         }
-        else if (student.getId() != null && !id.equals(student.getId()))
+    }
+
+    private static void validateUpdateStudentRequest(final String id, final Student student)
+    {
+        validateRequestId(id);
+        if (student.getId() != null && !id.equals(student.getId()))
         {
             throw new MalformedApiRequestException("The provided Id does not match with the Id given in the payload.");
         }

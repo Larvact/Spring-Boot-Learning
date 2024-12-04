@@ -83,6 +83,15 @@ class TestStudentService
                 .isEqualTo(studentResponse);
     }
 
+    @ParameterizedTest
+    @NullAndEmptySource
+    void givenBlankId_deleteStudent_malformedApiExceptionThrown(final String id)
+    {
+        final var malformedApiException = assertThrows(MalformedApiRequestException.class, () -> studentService.deleteStudent(id));
+
+        assertEquals("The provided Id was missing. Unable to update the student.", malformedApiException.getMessage());
+    }
+
     @Test
     void givenStudentId_deleteStudent_studentDeleted()
     {

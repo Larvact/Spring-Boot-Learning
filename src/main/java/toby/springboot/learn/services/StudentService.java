@@ -3,6 +3,7 @@ package toby.springboot.learn.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import toby.springboot.learn.documents.Student;
+import toby.springboot.learn.exception.MalformedApiRequestException;
 import toby.springboot.learn.repositories.StudentRepository;
 
 import java.util.List;
@@ -30,6 +31,11 @@ public class StudentService
 
     public Student updateStudent(final String id, final Student student)
     {
+        if(id == null || id.isBlank())
+        {
+            throw new MalformedApiRequestException("The provided Id was missing. Unable to update the student.");
+        }
+
         student.setId(id);
         return studentRepository.save(student);
     }

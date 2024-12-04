@@ -18,4 +18,9 @@ public class StudentService
     {
         return student;
     }
+
+    public void deleteStudent(final String id)
+    {
+
+    }
 }

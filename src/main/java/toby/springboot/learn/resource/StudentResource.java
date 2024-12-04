@@ -1,5 +1,6 @@
 package toby.springboot.learn.resource;
 
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -30,5 +31,12 @@ public class StudentResource
     {
         final var createdStudent = studentService.createStudent(student);
         return new ResponseEntity<>(createdStudent, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteStudent(@PathParam("id") final String id)
+    {
+        studentService.deleteStudent(id);
+        return ResponseEntity.noContent().build();
     }
 }

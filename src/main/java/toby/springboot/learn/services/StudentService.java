@@ -25,7 +25,7 @@ public class StudentService
 
     public void deleteStudent(final String id)
     {
-
+        studentRepository.deleteById(id);
     }
 
     public Object updateStudent(final Student student)

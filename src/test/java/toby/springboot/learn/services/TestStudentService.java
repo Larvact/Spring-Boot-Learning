@@ -72,5 +72,15 @@ class TestStudentService
                 .isEqualTo(studentResponse);
     }
 
+    @Test
+    void givenStudentId_deleteStudent_studentDeleted()
+    {
+        Mockito.doNothing().when(studentRepository).deleteById(STUDENT_ID);
+
+        studentService.deleteStudent(STUDENT_ID);
+
+        Mockito.verify(studentRepository).deleteById(STUDENT_ID);
+    }
+
 
 }

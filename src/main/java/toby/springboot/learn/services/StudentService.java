@@ -23,4 +23,9 @@ public class StudentService
     {
 
     }
+
+    public Object updateStudent(final Student student)
+    {
+        return student;
+    }
 }

@@ -3,13 +3,11 @@ package toby.springboot.learn.resource;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import toby.springboot.learn.documents.Student;
 import toby.springboot.learn.services.StudentService;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -38,5 +36,12 @@ public class StudentResource
     {
         studentService.deleteStudent(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping
+    public ResponseEntity<Student> updateStudent(@RequestBody final Student student)
+    {
+        studentService.updateStudent(student);
+        return ResponseEntity.ok(student);
     }
 }

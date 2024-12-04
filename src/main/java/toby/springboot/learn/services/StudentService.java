@@ -31,12 +31,20 @@ public class StudentService
 
     public Student updateStudent(final String id, final Student student)
     {
+        validateUpdateStudentRequest(id, student);
+        student.setId(id);
+        return studentRepository.save(student);
+    }
+
+    private static void validateUpdateStudentRequest(final String id, final Student student)
+    {
         if(id == null || id.isBlank())
         {
             throw new MalformedApiRequestException("The provided Id was missing. Unable to update the student.");
         }
-
-        student.setId(id);
-        return studentRepository.save(student);
+        else if (student.getId() != null && !id.equals(student.getId()))
+        {
+            throw new MalformedApiRequestException("The provided Id does not match with the Id given in the payload.");
+        }
     }
 }

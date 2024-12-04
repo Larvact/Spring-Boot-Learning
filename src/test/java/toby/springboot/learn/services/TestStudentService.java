@@ -1,6 +1,5 @@
 package toby.springboot.learn.services;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +21,6 @@ import toby.springboot.learn.repositories.StudentRepository;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ExtendWith(SpringExtension.class)
 class TestStudentService
 {
-    private static final String STUDENT_ID = UUID.randomUUID().toString();
+    private static final String STUDENT_ID = "fa9d4636-5ea3-4468-9002-5d5e2d4fd360";
 
     private Student student;
 
@@ -112,5 +110,15 @@ class TestStudentService
         final var malformedApiException = assertThrows(MalformedApiRequestException.class, () -> studentService.updateStudent(id, student));
 
         assertEquals("The provided Id was missing. Unable to update the student.", malformedApiException.getMessage());
+    }
+
+    @Test
+    void givenMismatchedIds_updatedStudentObject_updateStudent_malformedRequestExceptionThrown()
+    {
+        student.setId("1");
+
+        final var malformedApiException = assertThrows(MalformedApiRequestException.class, () -> studentService.updateStudent(STUDENT_ID, student));
+
+        assertEquals("The provided Id does not match with the Id given in the payload.", malformedApiException.getMessage());
     }
 }

@@ -1,10 +1,10 @@
 package toby.springboot.learn.services;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -26,15 +26,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TestStudentService
 {
     private static final String STUDENT_ID = UUID.randomUUID().toString();
-    private static final Student STUDENT = new Student(
-            "Toby",
-            "Goddard",
-            "tobyg7794@hotmail.com",
-            Gender.MALE,
-            new Address("United Kingdom", "London", "W14 9NA"),
-            Instant.now(),
-            List.of(Subject.MATH),
-            new BigDecimal("132.65"));
+
+    private Student student;
 
     @Autowired
     private StudentService studentService;
@@ -51,14 +44,28 @@ class TestStudentService
         }
     }
 
+    @BeforeEach
+    void setup()
+    {
+        student = new Student(
+                "Toby",
+                "Goddard",
+                "tobyg7794@hotmail.com",
+                Gender.MALE,
+                new Address("United Kingdom", "London", "W14 9NA"),
+                Instant.now(),
+                List.of(Subject.MATH),
+                new BigDecimal("132.65"));
+    }
+
     @Test
     void givenStudents_getAllStudents_returnsTheList()
     {
-        Mockito.when(studentRepository.findAll()).thenReturn(List.of(STUDENT));
+        Mockito.when(studentRepository.findAll()).thenReturn(List.of(student));
 
         assertThat(studentService.getAllStudents())
                 .hasSize(1)
-                .containsExactly(STUDENT);
+                .containsExactly(student);
     }
 
     @Test
@@ -66,9 +73,9 @@ class TestStudentService
     {
         final var studentResponse = new Student();
         studentResponse.setId(STUDENT_ID);
-        Mockito.when(studentRepository.insert(STUDENT)).thenReturn(studentResponse);
+        Mockito.when(studentRepository.insert(student)).thenReturn(studentResponse);
 
-        assertThat(studentService.createStudent(STUDENT))
+        assertThat(studentService.createStudent(student))
                 .isEqualTo(studentResponse);
     }
 
@@ -82,5 +89,13 @@ class TestStudentService
         Mockito.verify(studentRepository).deleteById(STUDENT_ID);
     }
 
+    @Test
+    void givenStudentId_updatedStudentObject_updateStudent_studentUpdated()
+    {
+        Mockito.when(studentRepository.save(student)).thenReturn(student);
 
+        assertThat(studentService.updateStudent(STUDENT_ID, student))
+                .extracting(Student::getId, Student::getFirstName)
+                .containsExactly(STUDENT_ID, "Toby");
+    }
 }

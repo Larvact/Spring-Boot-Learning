@@ -28,8 +28,9 @@ public class StudentService
         studentRepository.deleteById(id);
     }
 
-    public Object updateStudent(final Student student)
+    public Student updateStudent(final String id, final Student student)
     {
-        return student;
+        student.setId(id);
+        return studentRepository.save(student);
     }
 }

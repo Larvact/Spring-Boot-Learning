@@ -84,14 +84,15 @@ class TestStudentResource
     @Test
     void givenStudent_requestToUpdate_studentUpdated() throws Exception
     {
-        Mockito.when(studentService.updateStudent(STUDENT)).thenReturn(STUDENT);
+        Mockito.when(studentService.updateStudent(STUDENT_ID, STUDENT)).thenReturn(STUDENT);
         final var objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         final var requestBody = objectMapper.writeValueAsString(STUDENT);
 
         mvc.perform(MockMvcRequestBuilders.put(URI.create("/v1/students"))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
+                        .content(requestBody)
+                        .param("id", STUDENT_ID))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("Toby"));
     }

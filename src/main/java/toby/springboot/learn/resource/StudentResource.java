@@ -39,9 +39,9 @@ public class StudentResource
     }
 
     @PutMapping
-    public ResponseEntity<Student> updateStudent(@RequestBody final Student student)
+    public ResponseEntity<Student> updateStudent(@PathParam("id") final String id, @RequestBody final Student student)
     {
-        studentService.updateStudent(student);
-        return ResponseEntity.ok(student);
+        final var updatedStudent = studentService.updateStudent(id, student);
+        return ResponseEntity.ok(updatedStudent);
     }
 }

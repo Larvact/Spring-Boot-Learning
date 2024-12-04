@@ -61,5 +61,16 @@ class TestStudentService
                 .containsExactly(STUDENT);
     }
 
+    @Test
+    void givenStudent_createStudent_returnsTheStudent()
+    {
+        final var studentResponse = new Student();
+        studentResponse.setId(STUDENT_ID);
+        Mockito.when(studentRepository.insert(STUDENT)).thenReturn(studentResponse);
+
+        assertThat(studentService.createStudent(STUDENT))
+                .isEqualTo(studentResponse);
+    }
+
 
 }

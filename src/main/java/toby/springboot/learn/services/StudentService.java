@@ -18,13 +18,9 @@ public class StudentService
         return studentRepository.findAll();
     }
 
-
-
-
-
     public Student createStudent(final Student student)
     {
-        return student;
+        return studentRepository.insert(student);
     }
 
     public void deleteStudent(final String id)

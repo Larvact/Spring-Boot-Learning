@@ -21,8 +21,8 @@ import java.math.BigDecimal;
 import java.net.URI;
 import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
 
+import static java.lang.String.format;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(StudentResource.class)
 class TestStudentResource
 {
-    private static final String STUDENT_ID = UUID.randomUUID().toString();
+    private static final String STUDENT_ID = "1d5bcbe1-9716-4262-96a4-3aab8e49f338";
     private static final Student STUDENT = new Student(
             "Toby",
             "Goddard",
@@ -76,8 +76,7 @@ class TestStudentResource
     @Test
     void givenStudentId_requestToDelete_studentDeleted() throws Exception
     {
-        mvc.perform(MockMvcRequestBuilders.delete(URI.create("/v1/students"))
-                .param("id", STUDENT_ID))
+        mvc.perform(MockMvcRequestBuilders.delete(URI.create(format("/v1/students/%s", STUDENT_ID))))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
@@ -89,10 +88,9 @@ class TestStudentResource
         objectMapper.registerModule(new JavaTimeModule());
         final var requestBody = objectMapper.writeValueAsString(STUDENT);
 
-        mvc.perform(MockMvcRequestBuilders.put(URI.create("/v1/students"))
+        mvc.perform(MockMvcRequestBuilders.put(URI.create(format("/v1/students/%s", STUDENT_ID)))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody)
-                        .param("id", STUDENT_ID))
+                        .content(requestBody))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("Toby"));
     }
